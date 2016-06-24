@@ -1,0 +1,15 @@
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:back_to_sale_prices_list), admin_product_sale_prices_path(@product), icon: 'arrow-left', class: 'btn-primary' %>
+<% end %>
+
+<% content_for :page_title do %>
+  <%= Spree.t(:new_sale_price) %>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: 'On Sale' } %>
+<%= render partial: 'spree/shared/error_messages', locals: { target: @sale_price } %>
+
+<%= form_for [:admin, :product, @sale_price] do |f| %>
+  <%= render 'form', f: f %>
+  <%= render 'spree/admin/shared/new_resource_links', collection_url: admin_product_sale_prices_path(@product) %>
+<% end %>

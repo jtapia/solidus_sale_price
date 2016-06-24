@@ -1,14 +1,14 @@
 # Run Coverage report
-require 'simplecov'
-SimpleCov.start do
-  add_filter 'spec/dummy'
-  add_group 'Controllers', 'app/controllers'
-  add_group 'Helpers', 'app/helpers'
-  add_group 'Mailers', 'app/mailers'
-  add_group 'Models', 'app/models'
-  add_group 'Views', 'app/views'
-  add_group 'Libraries', 'lib'
-end
+# require 'simplecov'
+# SimpleCov.start do
+#   add_filter 'spec/dummy'
+#   add_group 'Controllers', 'app/controllers'
+#   add_group 'Helpers', 'app/helpers'
+#   add_group 'Mailers', 'app/mailers'
+#   add_group 'Models', 'app/models'
+#   add_group 'Views', 'app/views'
+#   add_group 'Libraries', 'lib'
+# end
 
 # Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
@@ -31,9 +31,11 @@ require 'spree/testing_support/factories'
 require 'spree/testing_support/url_helpers'
 
 # Requires factories defined in lib/spree_solidus_sale_pricing/factories.rb
-require 'spree_solidus_sale_pricing/factories'
+require 'solidus_sale_pricing/factories'
 
 RSpec.configure do |config|
+  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::TestHelpers, type: :view
   config.include FactoryGirl::Syntax::Methods
 
   # Infer an example group's spec type from the file location.

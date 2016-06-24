@@ -2,4 +2,28 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    models:
+      spree/sale_price:
+        one: Sale Price
+        other: Sale Prices
+  spree:
+    new_sale_price: New Sale Price
+    listing_sale_prices: Listing Sale Prices
+    creating_sale_price: Creating Sale Price
+    sale_products: On Sale
+    price_id: Price ID
+    original_price: Original Price
+    value: Value
+    start_at: Start At
+    end_at: End At
+    enabled: Enabled
+    stop: Stop
+    enable: Enable
+    sale_price_stopped: The sale price was stopped successfully!
+    sale_price_enabled: The sale price was enabled successfully!
+    please_stop_other_sale_prices: Please stop the other sale prices
+    successfully_created: The sale price was successfully created
+    successfully_updated: The sale price was successfully updated
+    error_on_update: Something went wrong, please check your data
+    back_to_sale_prices_list: Back to Sale Prices List

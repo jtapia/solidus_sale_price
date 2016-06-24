@@ -1,13 +1,11 @@
 Spree::Variant.class_eval do
-  delegate_belongs_to :default_price, :sale_price, :original_price
+  delegate_belongs_to :default_price, :sale_price, :sale_prices, :original_price, :on_sale?
 
   # TODO also accept a class reference for calculator type instead of only a string
-  def put_on_sale(value, calculator_type = "Spree::Calculator::DollarAmountSalePriceCalculator", all_currencies = true, start_at = Time.now, end_at = nil, enabled = true)
-    run_on_prices(all_currencies) { |p| p.put_on_sale value, calculator_type, start_at, end_at, enabled }
+  def put_on_sale(value:, calculator_type: "Spree::Calculator::DollarAmountSalePriceCalculator", all_currencies: true, start_at: Time.now, end_at: nil, enabled: true)
+    run_on_prices(all_currencies) { |p| p.put_on_sale value: value, calculator_type: calculator_type, start_at: start_at, end_at: end_at, enabled: enabled }
   end
   alias :create_sale :put_on_sale
-
-  # TODO make update_sale method
 
   def active_sale_in(currency)
     price_in(currency).active_sale
@@ -49,6 +47,10 @@ Spree::Variant.class_eval do
 
   def stop_sale(all_currencies=true)
     run_on_prices(all_currencies) { |p| p.stop_sale }
+  end
+
+  def update_sale(attrs, all_currencies=true)
+    run_on_prices(all_currencies) { |p| p.update_sale(attrs) }
   end
 
   private

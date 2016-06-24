@@ -4,9 +4,8 @@ module Spree
     belongs_to :price, class_name: 'Spree::Price'
     has_one :calculator, class_name: 'Spree::Calculator', as: :calculable, dependent: :destroy
     accepts_nested_attributes_for :calculator
+    validates :value, presence: true
     validates :calculator, presence: true
-
-    attr_accessible :value, :start_at, :end_at, :enabled
 
     scope :active, lambda {
       where("enabled = 't' AND (start_at <= ? OR start_at IS NULL) AND (end_at >= ? OR end_at IS NULL)", Time.now, Time.now)
@@ -31,7 +30,7 @@ module Spree
     end
 
     def enable
-      update_attribute(:enabled, true)
+      update_attributes({ end_at: nil, enabled: true })
     end
 
     def disable
@@ -47,6 +46,10 @@ module Spree
 
     def stop
       update_attributes({ end_at: Time.now, enabled: false })
+    end
+
+    def update(attrs={})
+      update_attributes(attrs)
     end
   end
 end

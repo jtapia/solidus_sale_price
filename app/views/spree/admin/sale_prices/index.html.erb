@@ -1,0 +1,54 @@
+<% content_for :page_title do %>
+  <%= Spree.t(:listing_sale_prices) %>
+<% end %>
+
+<% content_for :page_actions do %>
+  <%= button_link_to Spree.t(:new_sale_price), new_admin_product_sale_price_url(@product), icon: 'add', class: 'btn-success', id: 'admin_new_sale_price_link' %>
+<% end %>
+
+<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: 'On Sale' } %>
+
+<% if @sale_prices.any? %>
+  <table class='table' id='listing_sale_prices'>
+    <thead>
+      <tr data-hook='admin_sale_prices_index_headers'>
+        <th class='text-center'><%= Spree.t(:original_price) %></th>
+        <th class='text-center'><%= Spree.t(:value) %></th>
+        <th class='text-center'><%= Spree.t(:start_at) %></th>
+        <th class='text-center'><%= Spree.t(:end_at) %></th>
+        <th class='text-center'><%= Spree.t(:enabled) %></th>
+        <th class='actions' data-hook='admin_sale_prices_index_header_actions'></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @sale_prices.each do |sale_price| %>
+        <tr id='<%= spree_dom_id sale_price %>' data-hook='admin_sale_prices_index_rows' class='<%= cycle('odd', 'even') %>'>
+          <td class='align-center'><%= number_to_currency(@product.original_price.to_f) %></td>
+          <td class='align-center'><%= number_to_currency(sale_price.value) %></td>
+          <td class='align-center'><%= format_date(sale_price.start_at) %></td>
+          <td class='align-center'><%= format_date(sale_price.end_at) %></td>
+          <td class='align-center'><%= sale_price.enabled %></td>
+          <td class='actions actions-3 text-right' data-hook='admin_sale_prices_index_row_actions'>
+            <%= link_to_edit sale_price, url: edit_admin_product_sale_price_url(@product, sale_price), no_text: true, class: 'edit' if can?(:edit, sale_price)  %>
+            &nbsp;
+            <% if sale_price.enabled? %>
+              <%= link_to_with_icon 'remove', Spree.t(:stop), admin_product_sale_price_stop_path(@product, sale_price), no_text: true, class: 'stop' if can?(:edit, sale_price)  %>
+              &nbsp;
+            <% else %>
+              <%= link_to_with_icon 'check', Spree.t(:enable), admin_product_sale_price_enable_path(@product, sale_price), no_text: true, class: 'enable' if can?(:edit, sale_price)  %>
+              &nbsp;
+            <% end %>
+            <%= link_to_delete sale_price, url: admin_product_sale_price_path(@product, sale_price), no_text: true if can?(:delete, sale_price) %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <div class='alpha twelve columns no-objects-found'>
+    <%= render 'spree/admin/shared/no_objects_found',
+                 resource: Spree::SalePrice,
+                 new_resource_url: spree.new_admin_product_sale_price_path(@product) %>
+  </div>
+<% end %>

@@ -14,4 +14,8 @@ Spree::BaseHelper.class_eval do
       return ''
     end
   end
+
+  def format_date date
+    date.strftime('%Y-%m-%dT%H:%M:%S') if date
+  end
 end
