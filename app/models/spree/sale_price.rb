@@ -30,7 +30,7 @@ module Spree
     end
 
     def enable
-      update_attributes({ end_at: nil, enabled: true })
+      update_attributes(end_at: nil, enabled: true)
     end
 
     def disable
@@ -45,7 +45,7 @@ module Spree
     end
 
     def stop
-      update_attributes({ end_at: Time.now, enabled: false })
+      update_attributes(end_at: Time.now, enabled: false)
     end
 
     def update(attrs={})

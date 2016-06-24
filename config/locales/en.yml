@@ -24,6 +24,7 @@ en:
     sale_price_enabled: The sale price was enabled successfully!
     please_stop_other_sale_prices: Please stop the other sale prices
     successfully_created: The sale price was successfully created
+    error_on_create: Something went wrong, please check your data
     successfully_updated: The sale price was successfully updated
     error_on_update: Something went wrong, please check your data
     back_to_sale_prices_list: Back to Sale Prices List
