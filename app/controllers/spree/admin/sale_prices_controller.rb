@@ -11,7 +11,7 @@ module Spree
       def create
         begin
           @product.create_sale(sale_price_params)
-          flash[:success] = Spree.t(:successfully_created)
+          flash[:success] = Spree.t(:sale_price_successfully_created)
           redirect_to admin_product_sale_prices_path(@product)
         rescue => e
           flash[:error] = Spree.t(:error_on_create)
@@ -21,7 +21,7 @@ module Spree
 
       def update
         if @sale_price.update(sale_price_params)
-          flash.now[:success] = Spree.t(:successfully_updated)
+          flash.now[:success] = Spree.t(:sale_price_successfully_updated)
         else
           flash.now[:error] = Spree.t(:error_on_update)
         end
