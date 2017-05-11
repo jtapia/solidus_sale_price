@@ -8,6 +8,9 @@ en:
         one: Sale Price
         other: Sale Prices
   spree:
+    admin:
+      tab:
+        sale_products: Sale Products
     new_sale_price: New Sale Price
     listing_sale_prices: Listing Sale Prices
     creating_sale_price: Creating Sale Price
