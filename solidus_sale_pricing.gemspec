@@ -2,7 +2,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'solidus_sale_pricing'
-  s.version     = '2.0.0.alpha'
+  s.version     = '2.0.0'
   s.summary     = 'Sale pricing for Solidus'
   s.description = 'Solidus extension to set sale products with start and end date.'
   s.required_ruby_version = '>= 2.1'
