@@ -1,8 +1,8 @@
 module Spree
   module Admin
     class SalePricesController < ResourceController
-      before_filter :load_data
-      before_filter :load_sale_price, only: [:update, :destroy]
+      before_action :load_data
+      before_action :load_sale_price, only: [:update, :destroy]
 
       def index
         @sale_prices = @product.sale_prices
