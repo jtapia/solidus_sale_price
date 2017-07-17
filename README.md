@@ -19,51 +19,58 @@ sales, have a historical record of sale prices and put sales on hold.
 Installing
 ----------
 
-In your Gemfile add the following for the latest released version:
-
-    gem 'solidus_sale_pricing'
+In your `Gemfile` add the following for the latest released version:
+```ruby
+gem 'solidus_sale_pricing'
+```
 
 _OR_ to work from master:
-
-    gem 'solidus_sale_pricing', :git => 'git://github.com/jtapia/solidus_sale_pricing.git'
+```ruby
+gem 'solidus_sale_pricing', :git => 'git://github.com/jtapia/solidus_sale_pricing.git'
+```
 
 Install the Gem:
-
-    bundle install
+```sh
+bundle install
+```
 
 Copy the migrations in your app:
-
-    bundle exec rake railties:install:migrations
+```sh
+bundle exec rake railties:install:migrations
+```
 
 Run database migrations in your app:
-
-    bundle exec rake db:migrate
+```sh
+bundle exec rake db:migrate
+```
 
 Usage
 -----
 
 Simple example assuming you have a product in your database with the price of $20 and you want to put it on sale
 immediately for $10:
+```ruby
+product = Spree::Product.first
 
-    product = Spree::Product.first
+puts product.price.to_f              # => 20.0
+puts product.on_sale?                # => false
 
-    puts product.price.to_f              # => 20.0
-    puts product.on_sale?                # => false
+product.put_on_sale 10
 
-    product.put_on_sale 10
-
-    puts product.price.to_f              # => 10.0
-    puts product.original_price.to_f     # => 20.0
-    puts product.on_sale?                # => true
+puts product.price.to_f              # => 10.0
+puts product.original_price.to_f     # => 20.0
+puts product.on_sale?                # => true
+```
 
 By default it uses the supplied Spree::Calculator::DollarAmountSalePriceCalculator which essentially just returns the
 value you give it as the sale price.
 
 You can also give a certain percentage off by specifying that you want to use Spree::Calculator::PercentOffSalePriceCalculator.
 Note that the percentage is given as a float between 0 and 1, not the integer amount from 0 to 100.
-
-    product.put_on_sale 0.2, "Spree::Calculator::PercentOffSalePriceCalculator"
-    puts product.price.to_f              # => 16.0
+```ruby
+product.put_on_sale 0.2, "Spree::Calculator::PercentOffSalePriceCalculator"
+puts product.price.to_f              # => 16.0
+```
 
 This extension gives you all of the below methods on both your Products and Variants. If accessed on the Product when reading values,
 it will return values from your Master variant. If accessed on the Product when writing values, it will by default update
@@ -104,9 +111,9 @@ variants on sale or just particular variants. See the explanation of put\_on\_sa
 
 Options for put\_on\_sale (create_sale)
 ---------------------------------------
-
-    put_on_sale(value, calculator_type = "Spree::Calculator::DollarAmountSalePriceCalculator", all_variants = true, start_at = Time.now, end_at = nil, enabled = true)
-
+```ruby
+put_on_sale(value, calculator_type = "Spree::Calculator::DollarAmountSalePriceCalculator", all_variants = true, start_at = Time.now, end_at = nil, enabled = true)
+```
 **value**           (_float_)
 
 This is either the sale price that you want to sell the product for (if using the default DollarAmountSalePriceCalculator)
@@ -144,7 +151,7 @@ for some reason in the middle of a sale.
 Multiple active sales
 ---------------------
 
-Technically you can have more than one active sale at a time. However, because 
+Technically you can have more than one active sale at a time. However, because
 Solidus is going to use product.price or
 variant.price throughout (with no additional parameters or means to identify a particular sale), we have to consistently
 work with a single sale price so that the customer is always charged the same price as they see on the site. What we do then
@@ -159,7 +166,8 @@ Testing
 Tests are in progress, so there aren't any yet. I know, TDD, blah blah blah.
 
 Be sure to bundle your dependencies and then create a dummy test app for the specs to run against.
-
-    $ bundle
-    $ bundle exec rake test app
-    $ bundle exec rspec spec
+```sh
+$ bundle
+$ bundle exec rake test app
+$ bundle exec rspec spec
+```

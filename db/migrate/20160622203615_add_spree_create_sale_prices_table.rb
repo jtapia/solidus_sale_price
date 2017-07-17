@@ -1,4 +1,4 @@
-class AddSpreeCreateSalePricesTable < ActiveRecord::Migration
+class AddSpreeCreateSalePricesTable < SolidusSupport::Migration[4.2]
   def change
     create_table :spree_sale_prices do |t|
       t.integer :price_id
