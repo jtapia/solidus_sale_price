@@ -1,0 +1,8 @@
+<!-- replace_contents 'td.cart-item-price' -->
+
+<% if variant.product.on_sale? %>
+  <span class='price selling' itemprop='price'><%= number_to_currency(variant.product.sale_price) %></span>
+  <span class='price sale' itemprop='sale_price'><%= number_to_currency(variant.product.original_price) %></span>
+<% else %>
+  <span class='price selling' itemprop='price'><%= number_to_currency(variant.product.original_price) %></span>
+<% end %>
