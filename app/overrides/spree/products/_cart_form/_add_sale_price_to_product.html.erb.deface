@@ -1,0 +1,8 @@
+<!-- replace 'span.price' -->
+
+<% if @product.on_sale? %>
+  <span class='price sale' itemprop='sale_price'><%= number_to_currency(@product.original_price) %></span>
+  <span class='price selling' itemprop='price'><%= number_to_currency(@product.sale_price) %></span>
+<% else %>
+  <span class='price selling' itemprop='price'><%= number_to_currency(@product.original_price) %></span>
+<% end %>

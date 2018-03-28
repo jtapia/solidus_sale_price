@@ -1,19 +1,20 @@
 module Spree
   module Admin
     class SalePricesController < ResourceController
-      before_action :load_data
-      before_action :load_sale_price, only: [:update, :destroy]
+      before_action :load_product
+      before_action :load_sale_price, only: [:edit, :update, :destroy]
+
+      respond_to :js, :html
 
       def index
         @sale_prices = @product.sale_prices
       end
 
       def create
-        begin
-          @product.create_sale(sale_price_params)
+        if @product.create_sale(sale_price_params)
           flash[:success] = Spree.t(:sale_price_successfully_created)
           redirect_to admin_product_sale_prices_path(@product)
-        rescue => e
+        else
           flash[:error] = Spree.t(:error_on_create)
           render :new
         end
@@ -26,7 +27,7 @@ module Spree
           flash.now[:error] = Spree.t(:error_on_update)
         end
 
-        render :edit
+        redirect_to admin_product_sale_prices_path(@product)
       end
 
       def stop
@@ -58,11 +59,12 @@ module Spree
       end
 
       def permitted_sale_price_attributes
-        [ :value, :start_at, :end_at, :caclulator_type ]
+        [ :id, :value, :currency, :start_at, :end_at, :enabled, :variant_id ]
       end
 
-      def load_data
+      def load_product
         @product ||= Spree::Product.friendly.find(params[:product_id])
+        redirect_to request.referer unless @product.present?
       end
 
       def load_sale_price

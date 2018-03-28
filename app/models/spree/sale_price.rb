@@ -1,40 +1,44 @@
 module Spree
   class SalePrice < ActiveRecord::Base
-    # TODO validations
-    belongs_to :price, class_name: 'Spree::Price'
-    has_one :calculator, class_name: 'Spree::Calculator', as: :calculable, dependent: :destroy
+    acts_as_paranoid
+
+    belongs_to :price, class_name: 'Spree::Price', touch: true
+    delegate :currency, :currency=, to: :price, allow_nil: true
+    delegate :variant_id, to: :price, allow_nil: true
+
+    has_one :variant, through: :price
+    has_one :product, through: :variant
+    has_one :calculator, class_name: "Spree::Calculator", as: :calculable, dependent: :destroy
+
+    validates :value, :calculator, :price, presence: true
     accepts_nested_attributes_for :calculator
-    validates :value, presence: true
-    validates :calculator, presence: true
 
-    scope :active, lambda {
-      where("enabled = 't' AND (start_at <= ? OR start_at IS NULL) AND (end_at >= ? OR end_at IS NULL)", Time.now, Time.now)
-    }
+    scope :ordered, -> { order('start_at IS NOT NULL, start_at ASC') }
+    scope :active, -> { where(enabled: true).where('(start_at <= ? OR start_at IS NULL) AND (end_at >= ? OR end_at IS NULL)', Time.now, Time.now) }
 
-    # TODO make this work or remove it
-    #def self.calculators
-    #  Rails.application.config.spree.calculators.send(self.to_s.tableize.gsub('/', '_').sub('spree_', ''))
-    #end
+    def self.for_product(product)
+      ids = product.variants_including_master
+      ordered.where(price_id: Spree::Price.where(variant_id: ids))
+    end
 
     def calculator_type
       calculator.class.to_s if calculator
     end
 
-    def calculator_type=(calculator_type)
-      clazz = calculator_type.constantize if calculator_type
-      self.calculator = clazz.new if clazz and not self.calculator.is_a? clazz
-    end
-
-    def price
-      calculator.compute self
+    def calculated_price
+      calculator.compute(self)
     end
 
     def enable
-      update_attributes(end_at: nil, enabled: true)
+      update_attributes(enabled: true)
     end
 
     def disable
       update_attribute(:enabled, false)
+    end
+
+    def active?
+      active.include?(self)
     end
 
     def start(end_time = nil)
@@ -49,7 +53,13 @@ module Spree
     end
 
     def update(attrs={})
-      update_attributes(attrs)
+      update_attributes(attrs.except(:variant_id))
+      price.update_attribute(:variant_id, attrs[:variant_id])
+    end
+
+    # Convenience method for displaying the price of a given sale_price in the table
+    def display_price
+      Spree::Money.new(value || 0, { currency: price.currency })
     end
   end
 end

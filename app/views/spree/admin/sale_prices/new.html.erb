@@ -1,15 +1,38 @@
-<% content_for :page_actions do %>
-  <%= button_link_to Spree.t(:back_to_sale_prices_list), admin_product_sale_prices_path(@product), icon: 'arrow-left', class: 'btn-primary' %>
+<% if SolidusSupport.solidus_gem_version < Gem::Version.new('1.4.x') %>
+  <%= render partial: 'spree/admin/shared/configuration_menu' %>
+
+  <% content_for :page_title do %>
+    <%= Spree.t(:new_sale_price) %>
+  <% end %>
+
+  <% content_for :page_actions do %>
+    <li>
+      <%= button_link_to Spree.t(:back_to_sale_prices_list), admin_product_sale_prices_path(@product), icon: 'arrow-left' %>
+    </li>
+  <% end %>
+<% else %>
+  <%= render 'spree/admin/shared/product_tabs', current: 'On Sale' %>
+
+  <% admin_breadcrumb(Spree.t(:settings)) %>
+  <% admin_breadcrumb(link_to plural_resource_name(Spree::SalePrice), admin_product_sale_prices_path(@product)) %>
+  <% admin_breadcrumb(Spree.t(:new_sale_price)) %>
+
+  <% content_for :page_actions do %>
+  <% end %>
 <% end %>
 
-<% content_for :page_title do %>
-  <%= Spree.t(:new_sale_price) %>
-<% end %>
+<%= render 'spree/shared/error_messages', target: @sale_price %>
 
-<%= render partial: 'spree/admin/shared/product_tabs', locals: { current: 'On Sale' } %>
-<%= render partial: 'spree/shared/error_messages', locals: { target: @sale_price } %>
+<div data-hook='admin_sale_price_new_form'>
+  <%= form_for [:admin, :product, @sale_price] do |f| %>
+    <fieldset class='no-border-top'>
+      <%= render 'form', f: f %>
 
-<%= form_for [:admin, :product, @sale_price] do |f| %>
-  <%= render 'form', f: f %>
-  <%= render 'spree/admin/shared/new_resource_links', collection_url: admin_product_sale_prices_path(@product) %>
-<% end %>
+      <div class='clear'></div>
+
+      <div data-hook='admin_page_new_form_buttons'>
+        <%= render 'spree/admin/shared/new_resource_links', collection_url: admin_product_sale_prices_path(@product) %>
+      </div>
+    </fieldset>
+  <% end %>
+</div>

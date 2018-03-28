@@ -1,15 +1,20 @@
-Solidus Sale Pricing
+Solidus Sale Price
 =======================
+[![Build Status](https://travis-ci.org/jtapia/solidus_sale_price.svg?branch=master)](https://travis-ci.org/jtapia/solidus_sale_price)
 
 Based on https://github.com/jonathandean/spree-sale-pricing.
+Based on https://github.com/nebulab/solidus_sale_prices.
 
 New changes
 ===========
 
 - Added backend interface
 - Added missing methods
+- Add overrides for cart, checkout and PDP
+- Add variants to choose on admin
+- Change gem name to `solidus_sale_price`
 
-Solidus Sale Pricing
+Solidus Sale Price
 ==================
 
 A Solidus extension (Rails Engine) that lets you set sale prices on products, either by a fixed sale price or a
@@ -21,12 +26,12 @@ Installing
 
 In your `Gemfile` add the following for the latest released version:
 ```ruby
-gem 'solidus_sale_pricing'
+gem 'solidus_sale_price'
 ```
 
 _OR_ to work from master:
 ```ruby
-gem 'solidus_sale_pricing', :git => 'git://github.com/jtapia/solidus_sale_pricing.git'
+gem 'solidus_sale_price', :git => 'git://github.com/jtapia/solidus_sale_price.git'
 ```
 
 Install the Gem:
